@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { Stamp } from 'lucide-react';
-import { myStampCards, stores, activeStampTour } from '../../data/mock';
+import { stores, activeStampTour } from '../../data/mock';
+import { useAppStore } from '../../store/useAppStore';
 
 export function MyStampCards() {
   const navigate = useNavigate();
+  const myStampCards = useAppStore((s) => s.stampCards);
   const tourStoreIds = new Set(activeStampTour.storeIds);
 
   return (
@@ -13,7 +15,7 @@ export function MyStampCards() {
         <div className="flex items-center gap-1.5">
           <Stamp size={13} className="text-emerald-500" />
           <span className="text-xs font-bold text-emerald-500 uppercase tracking-wide">단골</span>
-          <span className="text-xs text-gray-400">· 방문할수록 쌓여요</span>
+          <span className="text-xs text-gray-400">· 리뷰 쓰면 적립돼요</span>
         </div>
         <button className="text-xs text-primary-500 font-medium">전체보기</button>
       </div>

@@ -1,24 +1,24 @@
 import L from 'leaflet';
-import { Marker, Popup } from 'react-leaflet';
-import { useNavigate } from 'react-router-dom';
+import { Marker } from 'react-leaflet';
 import type { Store } from '../../types';
 import { useAppStore } from '../../store/useAppStore';
 
-function createStoreIcon(isAffiliated: boolean) {
-  const bg = isAffiliated ? '#3B6CF4' : '#6B7280';
+function createStoreIcon(isAffiliated: boolean, isSelected: boolean) {
+  const bg = isSelected ? '#F59E0B' : isAffiliated ? '#3B6CF4' : '#6B7280';
+  const size = isSelected ? 34 : 28;
   return L.divIcon({
     className: '',
     html: `<div style="
       background:${bg};
-      width:28px;height:28px;
+      width:${size}px;height:${size}px;
       border-radius:50% 50% 50% 0;
       transform:rotate(-45deg);
       border:2px solid white;
       box-shadow:0 2px 6px rgba(0,0,0,0.3);
     "></div>`,
-    iconSize: [28, 28],
-    iconAnchor: [14, 28],
-    popupAnchor: [0, -30],
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size],
+    popupAnchor: [0, -size],
   });
 }
 
@@ -27,31 +27,20 @@ interface StoreMarkerProps {
 }
 
 export function StoreMarker({ store }: StoreMarkerProps) {
-  const navigate = useNavigate();
+  const selectedStoreId = useAppStore((s) => s.selectedStoreId);
   const setSelectedStoreId = useAppStore((s) => s.setSelectedStoreId);
-  const setBottomSheetExpanded = useAppStore((s) => s.setBottomSheetExpanded);
+
+  const isSelected = selectedStoreId === store.id;
 
   function handleClick() {
-    setSelectedStoreId(store.id);
-    setBottomSheetExpanded(true);
-    navigate(`/store/${store.id}`);
+    setSelectedStoreId(isSelected ? null : store.id);
   }
 
   return (
     <Marker
       position={[store.lat, store.lng]}
-      icon={createStoreIcon(store.isAffiliated)}
+      icon={createStoreIcon(store.isAffiliated, isSelected)}
       eventHandlers={{ click: handleClick }}
-    >
-      <Popup>
-        <div style={{ minWidth: 120 }}>
-          <p style={{ fontWeight: 600, marginBottom: 2 }}>{store.name}</p>
-          <p style={{ fontSize: 12, color: '#6B7280' }}>{store.category}</p>
-          {store.isAffiliated && (
-            <span style={{ fontSize: 11, color: '#059669', fontWeight: 600 }}>제휴</span>
-          )}
-        </div>
-      </Popup>
-    </Marker>
+    />
   );
 }

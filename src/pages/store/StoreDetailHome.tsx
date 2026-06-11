@@ -1,7 +1,4 @@
 import type { Store } from '../../types';
-import { reviews } from '../../data/mock';
-import { Avatar } from '../../components/ui/Avatar';
-import { StarRating } from '../../components/ui/StarRating';
 
 interface StoreDetailHomeProps {
   store: Store;
@@ -10,9 +7,6 @@ interface StoreDetailHomeProps {
 const DEPARTMENTS = ['컴퓨터공학과', '경영학과', '영어학과', '국제학과', '불어학과'];
 
 export function StoreDetailHome({ store }: StoreDetailHomeProps) {
-  const storeReviews = reviews.filter((r) => r.storeId === store.id);
-  const friendReviews = storeReviews.filter((r) => r.isFriend);
-
   // Mock department visit counts
   const deptVisits = DEPARTMENTS.map((dept) => ({
     dept,
@@ -22,23 +16,18 @@ export function StoreDetailHome({ store }: StoreDetailHomeProps) {
 
   return (
     <div className="px-4 py-4 flex flex-col gap-6">
-      {/* Friend reviews */}
-      {friendReviews.length > 0 && (
+      {/* Affiliated departments */}
+      {store.isAffiliated && store.affiliationDepartments.length > 0 && (
         <section>
-          <h3 className="font-bold text-gray-900 mb-3">친구들의 리뷰</h3>
-          <div className="flex flex-col gap-3">
-            {friendReviews.map((review) => (
-              <div key={review.id} className="flex gap-3">
-                <Avatar name={review.userName} size="sm" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-sm font-semibold text-gray-900">{review.userName}</span>
-                    <span className="text-xs text-gray-400">{review.userDepartment}</span>
-                    <StarRating rating={review.rating} size="sm" />
-                  </div>
-                  <p className="text-sm text-gray-600 line-clamp-2">{review.content}</p>
-                </div>
-              </div>
+          <h3 className="font-bold text-gray-900 mb-3">제휴 단과대</h3>
+          <div className="flex flex-wrap gap-2">
+            {store.affiliationDepartments.map((dept) => (
+              <span
+                key={dept}
+                className="inline-flex items-center px-3 py-1.5 bg-primary-50 text-primary-700 text-sm font-medium rounded-full border border-primary-200"
+              >
+                {dept}
+              </span>
             ))}
           </div>
         </section>

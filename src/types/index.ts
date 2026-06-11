@@ -7,6 +7,7 @@ export interface Store {
   address: string;
   phone: string;
   description: string;
+  introduction?: string;
   rating: number;
   reviewCount: number;
   isAffiliated: boolean;
@@ -56,6 +57,7 @@ export interface Review {
   images?: string[];
   likes: number;
   isFriend?: boolean;
+  visitCount?: number;
 }
 
 export interface User {
@@ -66,7 +68,6 @@ export interface User {
   university: string;
   isVerified: boolean;
   profileImage?: string;
-  qrCode: string;
 }
 
 export interface Friend {
@@ -140,6 +141,46 @@ export interface FavoritePlace {
   addedDate: string;
 }
 
+export interface FranchiseEvent {
+  id: string;
+  brand: string;
+  emoji: string;
+  branch: string;
+  distance: string;
+  title: string;
+  description: string;
+  badge: string;
+  validUntil: string;
+}
+
+export interface EditorPickStore {
+  storeId: string;
+  votes: number;
+}
+
+export interface EditorPick {
+  id: string;
+  week: string;
+  title: string;
+  subtitle: string;
+  emoji: string;
+  bgColor: string;
+  stores: EditorPickStore[];
+  author: string;
+  totalVotes: number;
+}
+
+export interface PartnerBenefit {
+  id: string;
+  title: string;
+  description: string;
+  source: string;
+  discount?: string;
+  condition?: string;
+  date: string;
+  emoji: string;
+}
+
 export type FeedItemType = 'visited' | 'saved' | 'reviewed';
 
 export interface FeedItem {
@@ -150,6 +191,7 @@ export interface FeedItem {
   type: FeedItemType;
   storeId: string;
   note?: string;
+  photoUrl?: string;
   rating?: number;
   timeAgo: string;
   date: string;

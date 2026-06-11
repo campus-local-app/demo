@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Store } from '../../types';
 import { AffiliationBadge } from './AffiliationBadge';
 import { StarRating } from './StarRating';
+import { benefits } from '../../data/mock';
 
 interface StoreCardProps {
   store: Store;
@@ -10,6 +11,7 @@ interface StoreCardProps {
 
 export function StoreCard({ store, variant = 'vertical' }: StoreCardProps) {
   const navigate = useNavigate();
+  const storeBenefit = benefits.find((b) => b.storeId === store.id);
 
   if (variant === 'horizontal') {
     return (
@@ -29,6 +31,11 @@ export function StoreCard({ store, variant = 'vertical' }: StoreCardProps) {
             <span className="text-xs text-gray-500">{store.rating.toFixed(1)}</span>
             {store.isAffiliated && <AffiliationBadge small />}
           </div>
+          {storeBenefit && (
+            <p className="text-xs text-emerald-600 font-medium mt-1 truncate">
+              {storeBenefit.discount} 할인
+            </p>
+          )}
           {store.distance !== undefined && (
             <p className="text-xs text-gray-400 mt-0.5">{store.distance}m</p>
           )}
@@ -56,6 +63,14 @@ export function StoreCard({ store, variant = 'vertical' }: StoreCardProps) {
             <span>리뷰 {store.reviewCount}</span>
             {store.distance !== undefined && <span>{store.distance}m</span>}
           </div>
+          {storeBenefit && (
+            <div className="flex items-center gap-1.5 mt-1">
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-xs font-semibold">
+                혜택
+              </span>
+              <span className="text-xs text-emerald-600 truncate">{storeBenefit.title}</span>
+            </div>
+          )}
           <p className="text-xs text-gray-400 mt-0.5 truncate">{store.address}</p>
         </div>
       </div>

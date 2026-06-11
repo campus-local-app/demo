@@ -1,8 +1,8 @@
 import { Bell } from 'lucide-react';
 import { currentUser } from '../../data/mock';
-import { StampTourBanner } from './StampTourBanner';
-import { BenefitsCarousel } from './BenefitsCarousel';
-import { PopularStores } from './PopularStores';
+import { FranchiseEventBanner } from './FranchiseEventBanner';
+import { EditorPicksSection } from './EditorPicksSection';
+import { FoodRoulette } from './FoodRoulette';
 
 export function HomePage() {
   return (
@@ -22,12 +22,14 @@ export function HomePage() {
         </button>
       </div>
 
-      {/* Layer 3 — 행사연계 */}
-      <StampTourBanner />
+      {/* 프랜차이즈 이벤트 배너 */}
+      <FranchiseEventBanner />
 
-      {/* Layer 1 — 제휴 */}
-      <BenefitsCarousel />
-      <PopularStores />
+      {/* 에디터 추천 + 투표 */}
+      <EditorPicksSection />
+
+      {/* 오늘 뭐먹지 룰렛 */}
+      <FoodRoulette />
     </div>
   );
 }

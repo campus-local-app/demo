@@ -1,33 +1,80 @@
 import { create } from 'zustand';
-import type { Category } from '../types';
+import type { Category, StampCard } from '../types';
+import { myStampCards } from '../data/mock';
+
+export type BottomSheetState = 'collapsed' | 'preview' | 'expanded';
+export type SubCategory = '카페' | '식당' | '주점' | '생활';
 
 interface MapCenter {
   lat: number;
   lng: number;
 }
 
-interface AppState {
-  selectedCategory: Category;
-  mapCenter: MapCenter;
-  mapZoom: number;
-  isBottomSheetExpanded: boolean;
-  selectedStoreId: string | null;
-  setCategory: (category: Category) => void;
-  setMapCenter: (center: MapCenter) => void;
-  setMapZoom: (zoom: number) => void;
-  setBottomSheetExpanded: (expanded: boolean) => void;
-  setSelectedStoreId: (id: string | null) => void;
+export interface AddStampResult {
+  newCount: number;
+  goal: number;
+  completed: boolean;
+  reward: string;
 }
 
-export const useAppStore = create<AppState>((set) => ({
+interface AppState {
+  selectedCategory: Category;
+  subCategory: SubCategory | null;
+  mapCenter: MapCenter;
+  mapZoom: number;
+  bottomSheetState: BottomSheetState;
+  selectedStoreId: string | null;
+  searchQuery: string;
+  stampCards: StampCard[];
+  setCategory: (category: Category) => void;
+  setSubCategory: (sub: SubCategory | null) => void;
+  setMapCenter: (center: MapCenter) => void;
+  setMapZoom: (zoom: number) => void;
+  setBottomSheetState: (state: BottomSheetState) => void;
+  setSelectedStoreId: (id: string | null) => void;
+  setSearchQuery: (query: string) => void;
+  addStamp: (storeId: string) => AddStampResult;
+}
+
+export const useAppStore = create<AppState>((set, get) => ({
   selectedCategory: '전체',
+  subCategory: null,
   mapCenter: { lat: 37.5974, lng: 127.058 },
   mapZoom: 16,
-  isBottomSheetExpanded: false,
+  bottomSheetState: 'preview',
   selectedStoreId: null,
-  setCategory: (category) => set({ selectedCategory: category }),
+  searchQuery: '',
+  stampCards: myStampCards,
+  setCategory: (category) => set({ selectedCategory: category, subCategory: null }),
+  setSubCategory: (sub) => set({ subCategory: sub }),
   setMapCenter: (center) => set({ mapCenter: center }),
   setMapZoom: (zoom) => set({ mapZoom: zoom }),
-  setBottomSheetExpanded: (expanded) => set({ isBottomSheetExpanded: expanded }),
+  setBottomSheetState: (state) => set({ bottomSheetState: state }),
   setSelectedStoreId: (id) => set({ selectedStoreId: id }),
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  addStamp: (storeId) => {
+    const cards = get().stampCards;
+    const existing = cards.find((c) => c.storeId === storeId);
+
+    if (existing) {
+      const newCount = existing.current + 1;
+      const completed = newCount >= existing.goal;
+      set({
+        stampCards: cards.map((c) =>
+          c.storeId === storeId ? { ...c, current: newCount } : c,
+        ),
+      });
+      return { newCount, goal: existing.goal, completed, reward: existing.reward };
+    }
+
+    const newCard: StampCard = {
+      id: `sc-${Date.now()}`,
+      storeId,
+      current: 1,
+      goal: 10,
+      reward: '무료 메뉴 1개',
+    };
+    set({ stampCards: [...cards, newCard] });
+    return { newCount: 1, goal: 10, completed: false, reward: newCard.reward };
+  },
 }));

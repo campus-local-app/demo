@@ -6,6 +6,8 @@ import { SchoolPage } from './pages/school/SchoolPage';
 import { FriendsPage } from './pages/friends/FriendsPage';
 import { MyPage } from './pages/mypage/MyPage';
 import { StoreDetailPage } from './pages/store/StoreDetailPage';
+import { MyReviewsPage } from './pages/mypage/MyReviewsPage';
+import { MyStampsPage } from './pages/mypage/MyStampsPage';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
   {
     path: '/store/:id',
     element: <StoreDetailPage />,
+  },
+  {
+    path: '/my/reviews',
+    element: <MyReviewsPage />,
+  },
+  {
+    path: '/my/stamps',
+    element: <MyStampsPage />,
   },
 ]);
 

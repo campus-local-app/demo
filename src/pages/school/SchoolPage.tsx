@@ -1,11 +1,23 @@
 import { useState } from 'react';
 import { MapPin, Clock, ChevronRight } from 'lucide-react';
-import { schoolEvents, notices } from '../../data/mock';
+import { schoolEvents, notices, partnerBenefits, currentUser } from '../../data/mock';
 import type { SchoolEventCategory } from '../../types';
 
+type SchoolTab = '제휴 소식' | '행사' | '공지';
 type Filter = '전체' | SchoolEventCategory;
 
+const TABS: SchoolTab[] = ['제휴 소식', '행사', '공지'];
 const FILTERS: Filter[] = ['전체', '총학생회', '단과대', '학과'];
+
+const DEPT_TO_COLLEGE: Record<string, string> = {
+  컴퓨터공학과: '공과대학',
+  전자공학과: '공과대학',
+  경영학과: '경영대학',
+  국제통상학과: '경영대학',
+  영어학과: '어문대학',
+  불어학과: '어문대학',
+  국제학과: '사회과학대학',
+};
 
 const CATEGORY_STYLE: Record<SchoolEventCategory, { bg: string; text: string }> = {
   총학생회: { bg: 'bg-primary-100', text: 'text-primary-700' },
@@ -36,7 +48,14 @@ function ddayColor(dateStr: string): string {
 }
 
 export function SchoolPage() {
+  const [activeTab, setActiveTab] = useState<SchoolTab>('제휴 소식');
   const [filter, setFilter] = useState<Filter>('전체');
+
+  const userCollege = DEPT_TO_COLLEGE[currentUser.department] ?? '';
+
+  const userBenefits = partnerBenefits.filter(
+    (b) => b.source === '총학생회' || b.source === userCollege,
+  );
 
   const highlighted = schoolEvents.find((e) => e.isHighlighted);
 
@@ -52,143 +71,196 @@ export function SchoolPage() {
         <p className="text-sm text-gray-400 mt-0.5">한국외국어대학교</p>
       </div>
 
-      {/* Highlighted event banner */}
-      {highlighted && (
-        <div className="mx-4 mb-4 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-5 relative overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute -right-6 -top-6 w-28 h-28 bg-white/10 rounded-full" />
-          <div className="absolute -right-2 -bottom-8 w-20 h-20 bg-white/10 rounded-full" />
-
-          <div className="relative">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-2xl">{highlighted.emoji}</span>
-              <span className="text-xs font-bold bg-white/20 text-white px-2 py-0.5 rounded-full">
-                {highlighted.category}
-              </span>
-              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${ddayColor(highlighted.date)}`}>
-                {dday(highlighted.date)}
-              </span>
-            </div>
-            <h2 className="text-white font-bold text-lg leading-snug mb-2">
-              {highlighted.title}
-            </h2>
-            <p className="text-white/80 text-xs leading-relaxed line-clamp-2 mb-3">
-              {highlighted.description}
-            </p>
-            <div className="flex items-center gap-3 text-white/70 text-xs">
-              <span className="flex items-center gap-1">
-                <Clock size={11} />
-                {highlighted.date} {highlighted.time}
-              </span>
-              <span className="flex items-center gap-1">
-                <MapPin size={11} />
-                {highlighted.location}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Filter chips */}
-      <div className="flex gap-2 overflow-x-auto px-4 pb-1 mb-1 scrollbar-hide">
-        {FILTERS.map((f) => (
+      {/* Tabs */}
+      <div className="grid grid-cols-3 border-b border-gray-200">
+        {TABS.map((tab) => (
           <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              filter === f
-                ? 'bg-primary-500 text-white'
-                : 'bg-white text-gray-600 border border-gray-200'
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`py-3 text-sm font-semibold text-center transition-colors relative ${
+              activeTab === tab
+                ? 'text-primary-600'
+                : 'text-gray-400'
             }`}
           >
-            {f}
+            {tab}
+            {activeTab === tab && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500" />
+            )}
           </button>
         ))}
       </div>
 
-      {/* Event feed */}
-      <div className="flex flex-col gap-3 px-4 pt-3">
-        {filtered.map((event) => {
-          const style = CATEGORY_STYLE[event.category];
-          return (
-            <div key={event.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
-              <div className="p-4">
-                {/* Top row */}
-                <div className="flex items-start gap-3">
-                  <div className="w-11 h-11 bg-gray-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
-                    {event.emoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>
-                        {event.category}
-                      </span>
-                      {event.college && (
-                        <span className="text-xs text-gray-400">{event.college}</span>
-                      )}
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ml-auto ${ddayColor(event.date)}`}>
-                        {dday(event.date)}
-                      </span>
-                    </div>
-                    <h3 className="font-bold text-gray-900 text-sm leading-snug">{event.title}</h3>
-                  </div>
+      {/* Tab Content */}
+      {activeTab === '제휴 소식' && (
+        <div className="flex flex-col gap-3 px-4 pt-4">
+          {userBenefits.map((item) => (
+            <div key={item.id} className="bg-white rounded-2xl shadow-sm p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-11 h-11 bg-gray-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                  {item.emoji}
                 </div>
-
-                {/* Description */}
-                <p className="text-xs text-gray-500 mt-2 leading-relaxed line-clamp-2">
-                  {event.description}
-                </p>
-
-                {/* Meta */}
-                <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-50 text-xs text-gray-400">
-                  <span className="flex items-center gap-1">
-                    <Clock size={11} />
-                    {event.date}{event.time ? ` ${event.time}` : ''}
-                  </span>
-                  <span className="flex items-center gap-1 truncate">
-                    <MapPin size={11} className="flex-shrink-0" />
-                    {event.location}
-                  </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary-50 text-primary-600">
+                      {item.source}
+                    </span>
+                    {item.discount && (
+                      <span className="text-xs font-bold text-rose-500 ml-auto">
+                        {item.discount}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-sm leading-snug">{item.title}</h3>
                 </div>
               </div>
-            </div>
-          );
-        })}
-
-        {filtered.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-300">
-            <p className="text-3xl mb-2">📭</p>
-            <p className="text-sm">해당 카테고리 소식이 없어요</p>
-          </div>
-        )}
-      </div>
-
-      {/* Official notices */}
-      <div className="px-4 mt-5">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-gray-900">공지사항</h2>
-          <button className="flex items-center gap-0.5 text-xs text-primary-500 font-medium">
-            전체보기 <ChevronRight size={13} />
-          </button>
-        </div>
-        <div className="flex flex-col border-t border-gray-100">
-          {notices.map((notice) => (
-            <div key={notice.id} className="flex items-start gap-2 py-3 border-b border-gray-100">
-              {notice.isPinned && (
-                <span className="flex-shrink-0 mt-0.5 text-xs font-bold text-primary-500 bg-primary-50 px-1.5 py-0.5 rounded">
-                  고정
-                </span>
-              )}
-              <div className="flex-1 min-w-0">
-                <p className={`text-sm truncate ${notice.isPinned ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
-                  {notice.title}
-                </p>
-                <p className="text-xs text-gray-400 mt-0.5">{notice.author} · {notice.date}</p>
+              <p className="text-xs text-gray-500 mt-2 leading-relaxed line-clamp-2">
+                {item.description}
+              </p>
+              <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-50 text-xs text-gray-400">
+                {item.condition && <span>{item.condition}</span>}
+                <span className="ml-auto">{item.date}</span>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      )}
+
+      {activeTab === '행사' && (
+        <>
+          {/* Highlighted event banner */}
+          {highlighted && (
+            <div className="mx-4 mt-4 mb-4 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-5 relative overflow-hidden">
+              <div className="absolute -right-6 -top-6 w-28 h-28 bg-white/10 rounded-full" />
+              <div className="absolute -right-2 -bottom-8 w-20 h-20 bg-white/10 rounded-full" />
+              <div className="relative">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">{highlighted.emoji}</span>
+                  <span className="text-xs font-bold bg-white/20 text-white px-2 py-0.5 rounded-full">
+                    {highlighted.category}
+                  </span>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${ddayColor(highlighted.date)}`}>
+                    {dday(highlighted.date)}
+                  </span>
+                </div>
+                <h2 className="text-white font-bold text-lg leading-snug mb-2">
+                  {highlighted.title}
+                </h2>
+                <p className="text-white/80 text-xs leading-relaxed line-clamp-2 mb-3">
+                  {highlighted.description}
+                </p>
+                <div className="flex items-center gap-3 text-white/70 text-xs">
+                  <span className="flex items-center gap-1">
+                    <Clock size={11} />
+                    {highlighted.date} {highlighted.time}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MapPin size={11} />
+                    {highlighted.location}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Filter chips */}
+          <div className="flex gap-2 overflow-x-auto px-4 pb-1 mb-1 scrollbar-hide">
+            {FILTERS.map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  filter === f
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white text-gray-600 border border-gray-200'
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          {/* Event feed */}
+          <div className="flex flex-col gap-3 px-4 pt-3">
+            {filtered.map((event) => {
+              const style = CATEGORY_STYLE[event.category];
+              return (
+                <div key={event.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                  <div className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-11 h-11 bg-gray-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                        {event.emoji}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>
+                            {event.category}
+                          </span>
+                          {event.college && (
+                            <span className="text-xs text-gray-400">{event.college}</span>
+                          )}
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ml-auto ${ddayColor(event.date)}`}>
+                            {dday(event.date)}
+                          </span>
+                        </div>
+                        <h3 className="font-bold text-gray-900 text-sm leading-snug">{event.title}</h3>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2 leading-relaxed line-clamp-2">
+                      {event.description}
+                    </p>
+                    <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-50 text-xs text-gray-400">
+                      <span className="flex items-center gap-1">
+                        <Clock size={11} />
+                        {event.date}{event.time ? ` ${event.time}` : ''}
+                      </span>
+                      <span className="flex items-center gap-1 truncate">
+                        <MapPin size={11} className="flex-shrink-0" />
+                        {event.location}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {filtered.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-12 text-gray-300">
+                <p className="text-3xl mb-2">📭</p>
+                <p className="text-sm">해당 카테고리 소식이 없어요</p>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      {activeTab === '공지' && (
+        <div className="px-4 mt-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-bold text-gray-900">공지사항</h2>
+            <button className="flex items-center gap-0.5 text-xs text-primary-500 font-medium">
+              전체보기 <ChevronRight size={13} />
+            </button>
+          </div>
+          <div className="flex flex-col border-t border-gray-100">
+            {notices.map((notice) => (
+              <div key={notice.id} className="flex items-start gap-2 py-3 border-b border-gray-100">
+                {notice.isPinned && (
+                  <span className="flex-shrink-0 mt-0.5 text-xs font-bold text-primary-500 bg-primary-50 px-1.5 py-0.5 rounded">
+                    고정
+                  </span>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm truncate ${notice.isPinned ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
+                    {notice.title}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5">{notice.author} · {notice.date}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

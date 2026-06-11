@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, Heart } from 'lucide-react';
-import { stores } from '../../data/mock';
+import { ArrowLeft, Star, Heart, Ticket } from 'lucide-react';
+import { stores, benefits } from '../../data/mock';
 import { AffiliationBadge } from '../../components/ui/AffiliationBadge';
 import { StoreDetailHome } from './StoreDetailHome';
 import { StoreReviews } from './StoreReviews';
@@ -80,6 +80,29 @@ export function StoreDetailPage() {
           </div>
         </div>
         <p className="text-sm text-gray-600 mt-2">{store.description}</p>
+
+        {/* Benefits */}
+        {(() => {
+          const storeBenefits = benefits.filter((b) => b.storeId === store.id);
+          if (storeBenefits.length === 0) return null;
+          return (
+            <div className="mt-3 flex flex-col gap-2">
+              {storeBenefits.map((b) => (
+                <div key={b.id} className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5">
+                  <Ticket size={16} className="text-amber-500 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-amber-700">{b.discount}</span>
+                      <span className="text-xs text-gray-500">{b.condition}</span>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-0.5">{b.description}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">~{b.validUntil}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Tab nav */}

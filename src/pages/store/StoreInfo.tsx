@@ -1,4 +1,4 @@
-import { Clock, MapPin, Phone } from 'lucide-react';
+import { Clock, MapPin, Phone, MessageSquare } from 'lucide-react';
 import type { Store } from '../../types';
 
 interface StoreInfoProps {
@@ -8,6 +8,17 @@ interface StoreInfoProps {
 export function StoreInfo({ store }: StoreInfoProps) {
   return (
     <div className="px-4 py-4 flex flex-col gap-4">
+      {/* Introduction */}
+      {store.introduction && (
+        <div className="flex items-start gap-3">
+          <MessageSquare size={18} className="text-gray-400 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-gray-900 mb-1">인사말</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{store.introduction}</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-start gap-3">
         <Clock size={18} className="text-gray-400 mt-0.5 flex-shrink-0" />
         <div>

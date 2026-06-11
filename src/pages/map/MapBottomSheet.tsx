@@ -69,7 +69,7 @@ export function MapBottomSheet({ stores, selectedStore }: MapBottomSheetProps) {
   return (
     <div
       ref={sheetRef}
-      className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl transition-all duration-300 z-[999] flex flex-col"
+      className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl transition-all duration-300 z-[500] flex flex-col"
       style={{ height: heightStyle }}
     >
       {/* Handle area */}

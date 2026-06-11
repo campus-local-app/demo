@@ -41,7 +41,7 @@ export function MapPage() {
     : null;
 
   return (
-    <div className="relative w-full" style={{ height: 'calc(100vh - 64px)' }}>
+    <div className="relative w-full isolate" style={{ height: 'calc(100vh - 64px)' }}>
       <MapView
         stores={filteredStores}
         center={[mapCenter.lat, mapCenter.lng]}

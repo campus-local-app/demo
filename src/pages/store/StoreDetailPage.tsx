@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, Heart, Ticket } from 'lucide-react';
+import { ArrowLeft, Star, Heart, Ticket, Share2 } from 'lucide-react';
 import { stores, benefits } from '../../data/mock';
 import { AffiliationBadge } from '../../components/ui/AffiliationBadge';
 import { StoreDetailHome } from './StoreDetailHome';
@@ -22,6 +22,7 @@ export function StoreDetailPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [isFavorite, setIsFavorite] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
 
   const store = stores.find((s) => s.id === id);
 
@@ -50,16 +51,33 @@ export function StoreDetailPage() {
           <ArrowLeft size={18} className="text-gray-800" />
         </button>
 
-        {/* Favorite */}
-        <button
-          onClick={() => setIsFavorite((f) => !f)}
-          className="absolute top-4 right-4 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center shadow-sm"
-        >
-          <Heart
-            size={18}
-            className={isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}
-          />
-        </button>
+        {/* Share & Favorite */}
+        <div className="absolute top-4 right-4 flex items-center gap-2">
+          <button
+            onClick={async () => {
+              const text = `📍 ${store.name}\n${store.category} · ⭐ ${store.rating} (리뷰 ${store.reviewCount}개)\n${store.description}`;
+              await navigator.clipboard.writeText(text);
+              setShareCopied(true);
+              setTimeout(() => setShareCopied(false), 1500);
+            }}
+            className="w-9 h-9 bg-white/90 rounded-full flex items-center justify-center shadow-sm"
+          >
+            {shareCopied ? (
+              <span className="text-xs">✅</span>
+            ) : (
+              <Share2 size={16} className="text-gray-600" />
+            )}
+          </button>
+          <button
+            onClick={() => setIsFavorite((f) => !f)}
+            className="w-9 h-9 bg-white/90 rounded-full flex items-center justify-center shadow-sm"
+          >
+            <Heart
+              size={18}
+              className={isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Info section */}

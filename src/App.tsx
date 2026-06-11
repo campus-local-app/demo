@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell';
 import { HomePage } from './pages/home/HomePage';
 import { MapPage } from './pages/map/MapPage';
-import { SchoolPage } from './pages/school/SchoolPage';
 import { FriendsPage } from './pages/friends/FriendsPage';
 import { MyPage } from './pages/mypage/MyPage';
 import { StoreDetailPage } from './pages/store/StoreDetailPage';
@@ -20,7 +19,6 @@ const router = createBrowserRouter([
     children: [
       { path: 'home', element: <HomePage /> },
       { path: 'map', element: <MapPage /> },
-      { path: 'school', element: <SchoolPage /> },
       { path: 'friends', element: <FriendsPage /> },
       { path: 'mypage', element: <MyPage /> },
     ],

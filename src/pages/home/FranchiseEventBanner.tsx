@@ -6,7 +6,7 @@ export function FranchiseEventBanner() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval>>();
+  const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
   const total = franchiseEvents.length;
 
   const startAutoSlide = useCallback(() => {

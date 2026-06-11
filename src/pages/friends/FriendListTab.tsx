@@ -150,7 +150,7 @@ function DetailView({
   const list = isMe ? myFavorites : (friendFavorites[userId] ?? []);
   const friend = friends.find((f) => f.id === userId);
   const ownerName = isMe ? '나' : (friend?.name ?? '');
-  const title = isMe ? '나의 맛집' : `${ownerName}의 맛집`;
+  const title = isMe ? '내 맛집' : `${ownerName}의 맛집`;
   const sub = isMe
     ? `${currentUser.department}`
     : `${friend?.department ?? ''} · ${list.length}곳`;
@@ -212,11 +212,11 @@ function NameListView({ onSelect }: { onSelect: (userId: string, isMe: boolean) 
         </div>
       </div>
 
-      {/* 나의 맛집 */}
+      {/* 내 맛집 */}
       {query === '' && (
         <>
           <NameRow
-            name="나의 맛집"
+            name="내 맛집"
             sub={currentUser.department}
             count={myFavorites.length}
             isMe

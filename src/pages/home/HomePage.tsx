@@ -2,7 +2,7 @@ import { Bell } from 'lucide-react';
 import { currentUser } from '../../data/mock';
 import { FranchiseEventBanner } from './FranchiseEventBanner';
 import { EditorPicksSection } from './EditorPicksSection';
-import { FoodRoulette } from './FoodRoulette';
+import { RecentReviewsSection } from './RecentReviewsSection';
 
 export function HomePage() {
   return (
@@ -25,11 +25,11 @@ export function HomePage() {
       {/* 프랜차이즈 이벤트 배너 */}
       <FranchiseEventBanner />
 
+      {/* 최근 리뷰 */}
+      <RecentReviewsSection />
+
       {/* 에디터 추천 + 투표 */}
       <EditorPicksSection />
-
-      {/* 오늘 뭐먹지 룰렛 */}
-      <FoodRoulette />
     </div>
   );
 }

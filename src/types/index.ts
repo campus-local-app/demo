@@ -81,39 +81,6 @@ export interface Friend {
   };
 }
 
-export interface Notice {
-  id: string;
-  title: string;
-  content: string;
-  date: string;
-  author: string;
-  isPinned: boolean;
-}
-
-export interface Event {
-  id: string;
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  storeId?: string;
-  image?: string;
-}
-
-export type SchoolEventCategory = '총학생회' | '단과대' | '주점' | '공연' | '동아리' | '학과';
-
-export interface SchoolEvent {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  time?: string;
-  location: string;
-  category: SchoolEventCategory;
-  college?: string;
-  isHighlighted?: boolean;
-  emoji: string;
-}
 
 export interface StampCard {
   id: string;
@@ -177,29 +144,3 @@ export interface EditorPick {
   totalVotes: number;
 }
 
-export interface PartnerBenefit {
-  id: string;
-  title: string;
-  description: string;
-  source: string;
-  discount?: string;
-  condition?: string;
-  date: string;
-  emoji: string;
-}
-
-export type FeedItemType = 'visited' | 'saved' | 'reviewed';
-
-export interface FeedItem {
-  id: string;
-  userId: string;
-  userName: string;
-  userDepartment: string;
-  type: FeedItemType;
-  storeId: string;
-  note?: string;
-  photoUrl?: string;
-  rating?: number;
-  timeAgo: string;
-  date: string;
-}

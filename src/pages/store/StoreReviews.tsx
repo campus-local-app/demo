@@ -156,7 +156,6 @@ function ReviewModal({
   onClose: () => void;
   onSubmit: (review: Review) => void;
 }) {
-  const [nickname, setNickname] = useState('');
   const [department, setDepartment] = useState('');
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState('');
@@ -168,16 +167,17 @@ function ReviewModal({
     );
   };
 
-  const canSubmit = nickname.trim() && department.trim() && rating > 0 && content.trim();
+  const canSubmit = department.trim() && rating > 0 && content.trim();
 
   const handleSubmit = () => {
     if (!canSubmit) return;
     const today = new Date().toISOString().slice(0, 10);
+    const anonNumber = Math.floor(Math.random() * 9000) + 1000;
     onSubmit({
       id: `local-${Date.now()}`,
       storeId,
       userId: 'local-user',
-      userName: nickname.trim(),
+      userName: `익명 부#${anonNumber}`,
       userDepartment: department.trim(),
       rating,
       content: content.trim(),
@@ -197,16 +197,9 @@ function ReviewModal({
           </button>
         </div>
 
-        {/* Nickname */}
-        <div className="mb-3">
-          <label className="text-sm font-medium text-gray-700 mb-1 block">닉네임</label>
-          <input
-            type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            placeholder="닉네임을 입력하세요"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-400"
-          />
+        {/* Anonymous label */}
+        <div className="mb-3 bg-gray-50 rounded-lg px-3 py-2">
+          <p className="text-sm text-gray-500">익명 부#으로 자동 게시됩니다</p>
         </div>
 
         {/* Department */}

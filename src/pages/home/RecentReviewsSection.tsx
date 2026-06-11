@@ -38,7 +38,7 @@ export function RecentReviewsSection() {
             >
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
-                  {review.userName.charAt(0)}
+                  {review.userName.startsWith('익명 부#') ? '부' : review.userName.charAt(0)}
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs font-semibold text-gray-800 truncate">

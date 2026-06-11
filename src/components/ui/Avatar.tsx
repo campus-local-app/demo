@@ -19,7 +19,7 @@ function getColor(name: string) {
 export function Avatar({ name, size = 'md' }: AvatarProps) {
   const sizeClass =
     size === 'sm' ? 'w-7 h-7 text-xs' : size === 'lg' ? 'w-12 h-12 text-lg' : 'w-9 h-9 text-sm';
-  const initial = name.charAt(0);
+  const initial = name.startsWith('익명 부#') ? '부' : name.charAt(0);
   return (
     <div
       className={`${sizeClass} ${getColor(name)} rounded-full flex items-center justify-center font-bold flex-shrink-0`}

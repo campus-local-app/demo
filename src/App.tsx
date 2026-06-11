@@ -7,6 +7,7 @@ import { MyPage } from './pages/mypage/MyPage';
 import { StoreDetailPage } from './pages/store/StoreDetailPage';
 import { MyReviewsPage } from './pages/mypage/MyReviewsPage';
 import { MyStampsPage } from './pages/mypage/MyStampsPage';
+import { MyVerificationsPage } from './pages/mypage/MyVerificationsPage';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: '/my/stamps',
     element: <MyStampsPage />,
+  },
+  {
+    path: '/my/verifications',
+    element: <MyVerificationsPage />,
   },
 ]);
 

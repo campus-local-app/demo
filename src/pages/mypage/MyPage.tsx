@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, ChevronRight, MessageSquare, X, CheckCircle2, Shield, ChevronLeft, Stamp } from 'lucide-react';
-import { currentUser, stores, reviews, benefits } from '../../data/mock';
+import { Settings, ChevronRight, MessageSquare, X, CheckCircle2, Shield, ChevronLeft, Stamp, History } from 'lucide-react';
+import { currentUser, stores, reviews, benefits, verificationHistory } from '../../data/mock';
 import type { Store } from '../../types';
 import { Avatar } from '../../components/ui/Avatar';
 import { useAppStore } from '../../store/useAppStore';
@@ -229,8 +229,21 @@ export function MyPage() {
         <VerificationCard onTap={() => setShowVerification(true)} />
       </div>
 
-      {/* 내 리뷰 · 단골 스탬프 링크 */}
+      {/* 인증 이력 · 내 리뷰 · 단골 스탬프 링크 */}
       <div className="mx-4 mb-4 bg-white rounded-2xl shadow-sm overflow-hidden">
+        <button
+          onClick={() => navigate('/my/verifications')}
+          className="w-full flex items-center justify-between px-5 py-4 border-b border-gray-100 active:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2.5">
+            <History size={16} className="text-violet-500" />
+            <span className="text-sm font-semibold text-gray-900">인증 이력</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-gray-400">{verificationHistory.length}회</span>
+            <ChevronRight size={16} className="text-gray-400" />
+          </div>
+        </button>
         <button
           onClick={() => navigate('/my/reviews')}
           className="w-full flex items-center justify-between px-5 py-4 border-b border-gray-100 active:bg-gray-50 transition-colors"

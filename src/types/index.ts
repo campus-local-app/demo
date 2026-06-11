@@ -135,6 +135,13 @@ export interface StampTourEvent {
   emoji: string;
 }
 
+export interface VerificationHistory {
+  id: string;
+  storeId: string;
+  discount: string;
+  date: string;
+}
+
 export interface FavoritePlace {
   storeId: string;
   privateNote: string;

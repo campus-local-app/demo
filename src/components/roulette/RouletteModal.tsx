@@ -30,12 +30,15 @@ const ITEM_HEIGHT = 64;
 const VISIBLE_ITEMS = 3;
 const REEL_SLOTS = 40;
 
+/** 각 가게의 첫 번째 메뉴를 대표 메뉴로 사용 */
+function getSignatureMenu(store: Store) {
+  return store.menuItems[0];
+}
+
 function buildReelItems(pool: Store[], totalSlots: number) {
-  const items: { store: Store; menu: Store['menuItems'][number] }[] = [];
+  const items: Store[] = [];
   for (let i = 0; i < totalSlots; i++) {
-    const store = pool[i % pool.length];
-    const menu = store.menuItems[Math.floor(Math.random() * store.menuItems.length)];
-    items.push({ store, menu });
+    items.push(pool[i % pool.length]);
   }
   return items;
 }
@@ -45,15 +48,12 @@ export function RouletteModal({ open, onClose }: RouletteModalProps) {
   const [phase, setPhase] = useState<'picking' | 'spinning' | 'result'>('picking');
   const [filter, setFilter] = useState<Filter>('전체');
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [reelItems, setReelItems] = useState<
-    { store: Store; menu: Store['menuItems'][number] }[]
-  >([]);
+  const [reelItems, setReelItems] = useState<Store[]>([]);
   const [reelOffset, setReelOffset] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const animRef = useRef<number>(0);
 
   const [resultStore, setResultStore] = useState<Store | null>(null);
-  const [resultMenu, setResultMenu] = useState<Store['menuItems'][number] | null>(null);
   const [copied, setCopied] = useState(false);
 
   // Drag-to-dismiss state
@@ -136,8 +136,8 @@ export function RouletteModal({ open, onClose }: RouletteModalProps) {
   };
 
   const handleShare = async () => {
-    if (!resultStore || !resultMenu) return;
-    const text = `🎲 오늘 뭐먹지? 룰렛 결과!\n👉 ${resultStore.name} - ${resultMenu.name} (${resultMenu.price.toLocaleString()}원)\n⭐ ${resultStore.rating} · 📍 ${resultStore.distance}m`;
+    if (!resultStore) return;
+    const text = `🎲 오늘 뭐먹지? 룰렛 결과!\n👉 ${resultStore.name}\n⭐ ${resultStore.rating} · 📍 ${resultStore.distance}m`;
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
@@ -152,7 +152,6 @@ export function RouletteModal({ open, onClose }: RouletteModalProps) {
       setReelItems([]);
       setReelOffset(0);
       setResultStore(null);
-      setResultMenu(null);
       setDragDeltaY(0);
     }
     return () => cancelAnimationFrame(animRef.current);
@@ -165,15 +164,13 @@ export function RouletteModal({ open, onClose }: RouletteModalProps) {
     const items = buildReelItems(pool, REEL_SLOTS);
     const winIndex = REEL_SLOTS - 2;
     const winStore = pool[Math.floor(Math.random() * pool.length)];
-    const winMenu = winStore.menuItems[Math.floor(Math.random() * winStore.menuItems.length)];
-    items[winIndex] = { store: winStore, menu: winMenu };
+    items[winIndex] = winStore;
 
     setReelItems(items);
     setReelOffset(0);
     setPhase('spinning');
     setIsAnimating(true);
     setResultStore(winStore);
-    setResultMenu(winMenu);
 
     const targetOffset = (winIndex - 1) * ITEM_HEIGHT;
     const duration = 3500;
@@ -387,18 +384,18 @@ export function RouletteModal({ open, onClose }: RouletteModalProps) {
                 className="absolute inset-x-0"
                 style={{ transform: `translateY(-${reelOffset}px)` }}
               >
-                {reelItems.map((item, i) => (
+                {reelItems.map((store, i) => (
                   <div
                     key={i}
                     className="flex items-center gap-3 px-4"
                     style={{ height: ITEM_HEIGHT }}
                   >
-                    <span className="text-2xl">{getStoreEmoji(item.store)}</span>
+                    <span className="text-2xl">{getStoreEmoji(store)}</span>
                     <div className="min-w-0">
                       <p className="text-sm font-bold text-gray-800 truncate">
-                        {item.store.name}
+                        {store.name}
                       </p>
-                      <p className="text-xs text-gray-400 truncate">{item.menu.name}</p>
+                      <p className="text-xs text-gray-400 truncate">{store.category} · {store.distance}m</p>
                     </div>
                   </div>
                 ))}
@@ -413,15 +410,12 @@ export function RouletteModal({ open, onClose }: RouletteModalProps) {
         )}
 
         {/* Result */}
-        {phase === 'result' && resultStore && resultMenu && (
+        {phase === 'result' && resultStore && (
           <div className="space-y-4">
             <div className="flex flex-col items-center py-4">
               <span className="text-5xl mb-2">{getStoreEmoji(resultStore)}</span>
               <p className="text-xs text-primary-500 font-semibold mb-1">🎉 오늘의 추천!</p>
               <p className="text-2xl font-bold text-gray-900">{resultStore.name}</p>
-              <p className="text-sm text-gray-500 mt-1">
-                {resultMenu.name} · {resultMenu.price.toLocaleString()}원
-              </p>
               <div className="flex items-center gap-3 text-xs text-gray-400 mt-2">
                 <span className="flex items-center gap-0.5">
                   <Star size={12} className="text-yellow-400 fill-yellow-400" />
@@ -433,6 +427,15 @@ export function RouletteModal({ open, onClose }: RouletteModalProps) {
                     {resultStore.distance}m
                   </span>
                 )}
+              </div>
+            </div>
+
+            {/* 대표 메뉴 참고 */}
+            <div className="bg-gray-50 rounded-xl px-4 py-3">
+              <p className="text-[11px] font-semibold text-gray-400 mb-1.5">대표 메뉴</p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-700">{getSignatureMenu(resultStore).name}</span>
+                <span className="text-sm font-medium text-gray-500">{getSignatureMenu(resultStore).price.toLocaleString()}원</span>
               </div>
             </div>
 

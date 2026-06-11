@@ -1,4 +1,4 @@
-import type { Store, Benefit, Review, Friend, Notice, Event, User, FavoritePlace, FeedItem, SchoolEvent, StampCard, StampTourEvent, FranchiseEvent, EditorPick, PartnerBenefit } from '../types';
+import type { Store, Benefit, Review, Friend, Notice, Event, User, FavoritePlace, FeedItem, SchoolEvent, StampCard, StampTourEvent, FranchiseEvent, EditorPick, PartnerBenefit, VerificationHistory } from '../types';
 
 export const currentUser: User = {
   id: 'u1',
@@ -1210,6 +1210,19 @@ export const stores: Store[] = [
       { id: 'm150', name: '밴드 세트', price: 2000 },
     ],
   },
+];
+
+export const verificationHistory: VerificationHistory[] = [
+  { id: 'vh1', storeId: 's1', discount: '10%', date: '2025-06-10' },
+  { id: 'vh2', storeId: 's2', discount: '500원', date: '2025-06-08' },
+  { id: 'vh3', storeId: 's12', discount: '10%', date: '2025-06-05' },
+  { id: 'vh4', storeId: 's15', discount: '10%', date: '2025-06-03' },
+  { id: 'vh5', storeId: 's1', discount: '10%', date: '2025-05-28' },
+  { id: 'vh6', storeId: 's26', discount: '15%', date: '2025-05-25' },
+  { id: 'vh7', storeId: 's3', discount: '기본 안주 무료', date: '2025-05-20' },
+  { id: 'vh8', storeId: 's8', discount: '20%', date: '2025-05-18' },
+  { id: 'vh9', storeId: 's35', discount: '10%', date: '2025-05-15' },
+  { id: 'vh10', storeId: 's27', discount: '1시간 무료', date: '2025-05-10' },
 ];
 
 export const benefits: Benefit[] = [

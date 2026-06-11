@@ -9,7 +9,7 @@ export function MyStampsPage() {
   const tourStoreIds = new Set(activeStampTour.storeIds);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50 max-w-[430px] mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 pt-14 pb-4 bg-white border-b border-gray-100">
         <button onClick={() => navigate(-1)} className="w-9 h-9 flex items-center justify-center">

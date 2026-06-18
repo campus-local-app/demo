@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { currentUser, stores, reviews } from '../../data/mock';
-import { StarRating } from '../../components/ui/StarRating';
 
 export function MyReviewsPage() {
   const navigate = useNavigate();
@@ -35,7 +34,6 @@ export function MyReviewsPage() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-gray-900">{store?.name ?? '가게'}</span>
-                    <StarRating rating={review.rating} size="sm" />
                   </div>
                   <p className="text-sm text-gray-600">{review.content}</p>
                   <p className="text-xs text-gray-400">{review.date}</p>

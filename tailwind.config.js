@@ -16,6 +16,22 @@ export default {
           800: '#1e38a0',
           900: '#1a2f80',
         },
+        cy: {
+          orange: '#FF6B35',
+          coral: '#FF8C69',
+          skin: '#FFEEE4',
+          cream: '#FFF8F2',
+          brown: '#8B5E3C',
+          'dark-brown': '#5C3D2E',
+          peach: '#FFD4B8',
+        },
+      },
+      fontFamily: {
+        cyworld: ['Galmuri11', 'DungGeunMo', 'monospace'],
+      },
+      boxShadow: {
+        'cy-window': '2px 2px 0px #8B5E3C, inset 1px 1px 0px #FFD4B8',
+        'cy-inset': 'inset 2px 2px 4px rgba(139,94,60,0.15), inset -1px -1px 2px rgba(255,255,255,0.8)',
       },
     },
   },

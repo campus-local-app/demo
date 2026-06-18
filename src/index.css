@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/npm/galmuri/dist/Galmuri11.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,6 +21,114 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
-    background-color: #f3f4f6;
+    background-color: #FFFFFF;
+  }
+}
+
+@layer components {
+  .cy-dotted-border {
+    border: 2px dotted #FFD4B8;
+  }
+
+  .cy-inset-panel {
+    background: #FFF8F2;
+    box-shadow: inset 2px 2px 4px rgba(139, 94, 60, 0.12), inset -1px -1px 2px rgba(255, 255, 255, 0.8);
+    border: 1px solid #FFD4B8;
+    border-radius: 6px;
+  }
+
+  .cy-title-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(139, 94, 60, 0.3);
+    flex-shrink: 0;
+  }
+
+  .cy-blink {
+    animation: cyBlink 1s step-end infinite;
+  }
+
+  @keyframes cyBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .cy-postit {
+    background: #FFF8DC;
+    box-shadow: 2px 3px 6px rgba(139,94,60,0.15);
+    border: none;
+    padding: 12px 14px;
+    border-radius: 2px;
+  }
+
+  .cy-note {
+    background: #FFFDF5;
+    background-image:
+      repeating-linear-gradient(
+        transparent,
+        transparent 23px,
+        #E8DDD0 23px,
+        #E8DDD0 24px
+      );
+    background-position-y: 8px;
+    border: 1px solid #E0D4C4;
+    border-radius: 4px;
+    padding: 10px 14px;
+    position: relative;
+    box-shadow: 2px 3px 8px rgba(139, 94, 60, 0.12);
+  }
+
+  .cy-note-tape {
+    position: absolute;
+    top: -6px;
+    width: 48px;
+    height: 14px;
+    border-radius: 1px;
+    opacity: 0.7;
+  }
+
+  .cy-note-tape-left {
+    left: 12px;
+    transform: rotate(-3deg);
+    background: linear-gradient(135deg, #FFE4B5, #FFDEAD);
+    border: 1px solid rgba(210, 180, 140, 0.4);
+  }
+
+  .cy-note-tape-right {
+    right: 12px;
+    transform: rotate(2deg);
+    background: linear-gradient(135deg, #B0E0E6, #ADD8E6);
+    border: 1px solid rgba(135, 180, 200, 0.4);
+  }
+
+  .cy-note-clip {
+    position: absolute;
+    top: -4px;
+    left: 16px;
+    font-size: 14px;
+    transform: rotate(-10deg);
+  }
+
+  .cy-note-pin {
+    position: absolute;
+    top: -5px;
+    right: 14px;
+    font-size: 12px;
+  }
+
+  /* Retro scrollbar */
+  .cy-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .cy-scroll::-webkit-scrollbar-track {
+    background: #FFEEE4;
+  }
+  .cy-scroll::-webkit-scrollbar-thumb {
+    background: #FF8C69;
+    border-radius: 4px;
+  }
+  .cy-scroll::-webkit-scrollbar-thumb:hover {
+    background: #FF6B35;
   }
 }

@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import type { Store } from '../../types';
-import { StarRating } from '../../components/ui/StarRating';
 import { AffiliationBadge } from '../../components/ui/AffiliationBadge';
 import { benefits } from '../../data/mock';
 
@@ -40,8 +39,6 @@ export function MiniCard({ store }: MiniCardProps) {
               {store.isAffiliated && <AffiliationBadge small />}
             </div>
             <div className="flex items-center gap-1.5">
-              <StarRating rating={store.rating} size="sm" showNumber={false} />
-              <span className="text-xs text-gray-500">{store.rating.toFixed(1)}</span>
               <span className="text-xs text-gray-400">리뷰 {store.reviewCount}</span>
             </div>
             <p className="text-xs text-gray-400 mt-0.5 truncate">{store.address}</p>

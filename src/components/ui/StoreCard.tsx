@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import type { Store } from '../../types';
 import { AffiliationBadge } from './AffiliationBadge';
-import { StarRating } from './StarRating';
 import { benefits } from '../../data/mock';
 
 interface StoreCardProps {
@@ -27,8 +26,6 @@ export function StoreCard({ store, variant = 'vertical' }: StoreCardProps) {
             <span className="text-xs font-semibold text-gray-800 truncate">{store.name}</span>
           </div>
           <div className="flex items-center gap-1">
-            <StarRating rating={store.rating} size="sm" showNumber={false} />
-            <span className="text-xs text-gray-500">{store.rating.toFixed(1)}</span>
             {store.isAffiliated && <AffiliationBadge small />}
           </div>
           {storeBenefit && (
@@ -59,7 +56,6 @@ export function StoreCard({ store, variant = 'vertical' }: StoreCardProps) {
             {store.isAffiliated && <AffiliationBadge small />}
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <StarRating rating={store.rating} />
             <span>리뷰 {store.reviewCount}</span>
             {store.distance !== undefined && <span>{store.distance}m</span>}
           </div>

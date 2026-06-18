@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageSquareText, Star, ThumbsUp } from 'lucide-react';
+import { MessageSquareText, ThumbsUp } from 'lucide-react';
 import { reviews, stores } from '../../data/mock';
 
 const recentReviews = [...reviews]
@@ -46,20 +46,6 @@ export function RecentReviewsSection() {
                   </p>
                   <p className="text-[10px] text-gray-400">{review.userDepartment}</p>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-1 mb-1.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={10}
-                    className={
-                      i < review.rating
-                        ? 'text-yellow-400 fill-yellow-400'
-                        : 'text-gray-200'
-                    }
-                  />
-                ))}
               </div>
 
               <p className="text-xs text-gray-600 line-clamp-2 mb-2 leading-relaxed">
